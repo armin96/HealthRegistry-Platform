@@ -1,21 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Health Registry — Hybrid Polyglot Persistence Platform combining MySQL and MongoDB for enterprise medical records management.">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <aside>
-        <h1>Health <span style="color:var(--accent)">Registry</span></h1>
-        <nav>
-            <ul>
-                <li><a href="/" class="<%= title.includes('Dashboard') ? 'active' : '' %>">Dashboard</a></li>
-                <li><a href="/patients" class="<%= title.includes('Explorer') ? 'active' : '' %>">Patients</a></li>
-                <li><a href="/audit" class="<%= title.includes('Audit') ? 'active' : '' %>">Audit Logs</a></li>
-            </ul>
-        </nav>
-    </aside>
-    <main>
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside id="sidebar">
+    <a href="/" class="sidebar-logo">
+      <div class="sidebar-logo-icon">⚕</div>
+      <span class="sidebar-logo-text">Health<span>Reg</span></span>
+    </a>
+
+    <p class="nav-section-label">Navigation</p>
+    <nav>
+      <ul>
+        <li><a href="/" class="nav-link <%= title.includes('Dashboard') ? 'active' : '' %>">
+          <span class="nav-icon">⊞</span> Dashboard
+        </a></li>
+        <li><a href="/patients" class="nav-link <%= title.includes('Explorer') || title.includes('Patient:') ? 'active' : '' %>">
+          <span class="nav-icon">◎</span> Patients
+        </a></li>
+        <li><a href="/analytics" class="nav-link <%= title.includes('Analytics') ? 'active' : '' %>">
+          <span class="nav-icon">◈</span> Analytics
+          <span class="nav-badge">NEW</span>
+        </a></li>
+        <li><a href="/audit" class="nav-link <%= title.includes('Audit') ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Audit Trail
+        </a></li>
+      </ul>
+    </nav>
+
+    <p class="nav-section-label" style="margin-top:2rem;">Architecture</p>
+    <nav>
+      <ul>
+        <li><a href="/api/stats" target="_blank" class="nav-link" id="nav-api-link">
+          <span class="nav-icon">◈</span> REST API <code class="code-hint" style="margin-left:auto">/api</code>
+        </a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p class="nav-section-label" style="margin-bottom:0.75rem;">Tech Stack</p>
+      <div class="tech-badges">
+        <span class="tech-badge mysql">MySQL 8</span>
+        <span class="tech-badge mongo">MongoDB 7</span>
+        <span class="tech-badge node">Node.js</span>
+        <span class="tech-badge node" style="background:rgba(255,255,255,0.05);color:var(--text-2);border-color:var(--border);">Express</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main id="main-content">
+    <!-- Live Topbar -->
+    <div class="topbar animate-in">
+      <div class="system-status">
+        <span class="live-dot"></span>
+        System Operational
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-time" id="live-clock">--:--:--</span>
+        <span class="db-pill mysql">MySQL</span>
+        <span class="db-pill mongo">MongoDB</span>
+      </div>
+    </div>

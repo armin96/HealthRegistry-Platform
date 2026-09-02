@@ -1,3 +1,60 @@
-    </main>
+  </main><!-- end #main-content -->
+
+  <script>
+    // ── Live Clock ──────────────────────────────────────────
+    function updateClock() {
+      const el = document.getElementById('live-clock');
+      if (el) {
+        const now = new Date();
+        el.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+      }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── Patients Live Search ─────────────────────────────────
+    const searchInput = document.getElementById('patient-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const q = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('tbody tr[data-name]');
+        let visible = 0;
+        rows.forEach(row => {
+          const name = row.dataset.name.toLowerCase();
+          const id   = row.dataset.id || '';
+          const match = !q || name.includes(q) || id.includes(q);
+          row.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        const countEl = document.getElementById('patient-count');
+        if (countEl) countEl.textContent = visible + ' patients';
+      });
+    }
+
+    // ── Stat counter animation ───────────────────────────────
+    document.querySelectorAll('.stat-val[data-target]').forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      let current = 0;
+      const step = Math.ceil(target / 40);
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current.toLocaleString();
+        if (current >= target) clearInterval(timer);
+      }, 20);
+    });
+
+    // ── Mini bar chart animate ───────────────────────────────
+    document.querySelectorAll('.mini-bar-fill[data-pct]').forEach(el => {
+      el.style.width = '0%';
+      setTimeout(() => { el.style.width = el.dataset.pct + '%'; }, 300);
+    });
+
+    // ── Animate rows on load ─────────────────────────────────
+    document.querySelectorAll('tbody tr').forEach((tr, i) => {
+      tr.style.animationDelay = (i * 0.04) + 's';
+      tr.classList.add('animate-up');
+    });
+  </script>
+
 </body>
 </html>

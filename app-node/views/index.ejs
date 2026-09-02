@@ -1,142 +1,179 @@
 <%- include('partials/header') %>
 
-<header>
-    <h2>Health Dashboard</h2>
-</header>
-
-<div class="grid">
-    <div class="card stat-card">
-        <span class="stat-val"><%= stats.patients %></span>
-        <span class="stat-label">Total Patients</span>
+<!-- ═══ PAGE HEADER ═══ -->
+<div class="page-header animate-up">
+  <div class="page-header-info">
+    <div class="page-breadcrumb">
+      <span>⊞</span> <span>Overview</span>
     </div>
-    <div class="card stat-card">
-        <span class="stat-val"><%= stats.doctors %></span>
-        <span class="stat-label">Authorized Doctors</span>
-    </div>
-    <div class="card stat-card">
-        <span class="stat-val"><%= stats.appointments %></span>
-        <span class="stat-label">Active Appts</span>
-    </div>
+    <h1 class="page-title">Health Registry Dashboard</h1>
+    <p class="page-subtitle">Real-time clinical operations across MySQL &amp; MongoDB — <strong><%= stats.patients.toLocaleString() %></strong> patients on record</p>
+  </div>
 </div>
 
-<div class="grid" style="grid-template-columns: 2fr 1.2fr;">
-    <section>
-        <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem;">Recent Appointments</h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Patient</th>
-                            <th>Doctor</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% appointments.forEach(apt => { %>
-                        <tr>
-                            <td><strong><%= apt.patient_name %></strong></td>
-                            <td>Dr. <%= apt.doctor_name.replace('Dr. ', '') %></td>
-                            <td style="color: var(--text-secondary);"><%= new Date(apt.scheduled_at).toLocaleDateString() %></td>
-                            <td><span class="badge badge-warning">Scheduled</span></td>
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<!-- ═══ STAT CARDS ═══ -->
+<div class="grid-4">
+  <div class="card stat-card animate-up delay-1">
+    <div class="stat-card-inner">
+      <div class="stat-card-left">
+        <div class="stat-label">Total Patients</div>
+        <div class="stat-val accent" data-target="<%= stats.patients %>">0</div>
+        <div class="stat-delta">↑ +1,900 seeded</div>
+      </div>
+      <div class="stat-icon-wrap purple">👤</div>
+    </div>
+  </div>
 
-        <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-                Automated Transitions
-                <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">SQL TRIGGER</span>
-            </h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Transition ID</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Triggered At</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>TRN-001</td>
-                            <td>Appointment Reminder</td>
-                            <td><span class="badge badge-success">Completed</span></td>
-                            <td style="color: var(--text-secondary);">2023-10-26 09:00 AM</td>
-                        </tr>
-                        <tr>
-                            <td>TRN-002</td>
-                            <td>Patient Follow-up</td>
-                            <td><span class="badge badge-warning">Pending</span></td>
-                            <td style="color: var(--text-secondary);">2023-10-26 10:30 AM</td>
-                        </tr>
-                        <tr>
-                            <td>TRN-003</td>
-                            <td>Prescription Refill</td>
-                            <td><span class="badge badge-danger">Failed</span></td>
-                            <td style="color: var(--text-secondary);">2023-10-25 04:15 PM</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="card stat-card animate-up delay-2">
+    <div class="stat-card-inner">
+      <div class="stat-card-left">
+        <div class="stat-label">Active Doctors</div>
+        <div class="stat-val" data-target="<%= stats.doctors %>">0</div>
+        <div class="stat-delta">10 specializations</div>
+      </div>
+      <div class="stat-icon-wrap cyan">🩺</div>
+    </div>
+  </div>
 
-        <div class="card">
-            <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-                Provider Performance
-                <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">MYSQL</span>
-            </h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Doctor</th>
-                            <th>Specialization</th>
-                            <th>Total Activity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% topDoctors.forEach(doc => { %>
-                        <tr>
-                            <td><strong><%= doc.full_name %></strong></td>
-                            <td style="color: var(--text-secondary);"><%= doc.specialization %></td>
-                            <td><span class="badge badge-success"><%= doc.total_appts %> Visits</span></td>
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+  <div class="card stat-card animate-up delay-3">
+    <div class="stat-card-inner">
+      <div class="stat-card-left">
+        <div class="stat-label">Appointments</div>
+        <div class="stat-val" data-target="<%= stats.appointments %>">0</div>
+        <div class="stat-delta">recent activity</div>
+      </div>
+      <div class="stat-icon-wrap green">📋</div>
+    </div>
+  </div>
 
-    <aside-card class="card">
-        <header>
-        <h2 style="display: flex; align-items: center; gap: 12px;">
-            System Audit Trail
-        </h2>
-    </header>    
-        <div class="audit-list">
-            <% auditLogs.forEach(log => { %>
-                <div class="audit-item">
-                    <span class="audit-action"><%= log.action.replace(/_/g, ' ').toUpperCase() %></span>
-                    <div class="audit-meta">
-                        <%= new Date(log.timestamp).toLocaleTimeString() %> • <%= log.target_type %>
-                    </div>
+  <div class="card stat-card animate-up delay-4">
+    <div class="stat-card-inner">
+      <div class="stat-card-left">
+        <div class="stat-label">Departments</div>
+        <div class="stat-val" data-target="160">0</div>
+        <div class="stat-delta">across 160 sections</div>
+      </div>
+      <div class="stat-icon-wrap amber">🏥</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT GRID ═══ -->
+<div class="grid-main">
+  
+  <!-- LEFT COLUMN -->
+  <div>
+
+    <!-- Recent Appointments -->
+    <div class="card animate-up" style="margin-bottom:1.5rem;">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(124,58,237,0.15);">📅</div>
+          Recent Appointments
+        </div>
+        <span class="db-pill mysql">MySQL</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Physician</th>
+              <th>Scheduled</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% appointments.forEach(apt => { %>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="avatar" style="background:rgba(124,58,237,0.2);color:var(--primary-light);">
+                    <%= apt.patient_name.charAt(0) %>
+                  </div>
+                  <strong><%= apt.patient_name %></strong>
                 </div>
+              </td>
+              <td style="color:var(--text-2);">Dr. <%= apt.doctor_name.replace('Dr. ','') %></td>
+              <td>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-3);">
+                  <%= new Date(apt.scheduled_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) %>
+                </span>
+              </td>
+              <td><span class="badge badge-warning">Scheduled</span></td>
+            </tr>
             <% }) %>
-        </div>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-        <div style="margin-top: 2rem; text-align: center;">
-            <a href="/audit" class="btn" style="width: 100%; justify-content: center;">
-                Full System logs
-            </a>
+    <!-- Top Providers -->
+    <div class="card animate-up" style="margin-bottom:1.5rem;">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(6,182,212,0.15);">🏆</div>
+          Top Performing Providers
         </div>
-    </aside-card>
+        <span class="db-pill mysql">MySQL JOIN</span>
+      </div>
+      <div class="card-body" style="padding-top:0;">
+        <div class="mini-bar-chart">
+          <% 
+            const maxAppts = topDoctors[0] ? topDoctors[0].total_appts : 1;
+            topDoctors.forEach((doc, i) => { 
+              const pct = Math.round((doc.total_appts / maxAppts) * 100);
+              const colors = ['purple','cyan','green'];
+          %>
+          <div class="mini-bar-row">
+            <span class="mini-bar-label" title="<%= doc.full_name %>"><%= doc.full_name.replace('Dr. ','') %></span>
+            <div class="mini-bar-track">
+              <div class="mini-bar-fill <%= colors[i % 3] %>" data-pct="<%= pct %>" style="width:0%"></div>
+            </div>
+            <span class="mini-bar-val"><%= doc.total_appts %></span>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN — Audit Feed -->
+  <div class="card animate-up delay-2" style="height:fit-content;">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">🛡</div>
+        Live Audit Feed
+        <span class="live-dot" style="margin-left:4px;"></span>
+      </div>
+      <span class="db-pill mongo">MongoDB</span>
+    </div>
+    <div class="audit-feed">
+      <% 
+        const dotColors = ['green','cyan','purple','amber','rose'];
+        auditLogs.forEach((log, i) => { 
+      %>
+      <div class="audit-item">
+        <div class="audit-dot <%= dotColors[i % 5] %>"></div>
+        <div>
+          <div class="audit-action"><%= log.action.replace(/_/g,' ').toUpperCase() %></div>
+          <div class="audit-meta">
+            <%= log.target_type %> &bull; 
+            <span class="badge-neutral" style="display:inline;font-size:0.68rem;padding:0 5px;border-radius:3px;background:rgba(255,255,255,0.05)"><%= log.actor_role %></span> &bull;
+            <%= new Date(log.timestamp).toLocaleTimeString('en-GB',{hour12:false}) %>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <div style="padding:1.25rem 1.75rem;">
+      <a href="/audit" class="btn btn-outline" style="width:100%;justify-content:center;">
+        View Full Audit Trail →
+      </a>
+    </div>
+  </div>
+
 </div>
 
 <%- include('partials/footer') %>

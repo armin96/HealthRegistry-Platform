@@ -1,46 +1,85 @@
 <%- include('partials/header') %>
 
-    <header>
-        <h2>Patient Explorer</h2>
-    </header>
-
-    <div class="card" style="padding: 0;">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Full Name</th>
-                        <th>Gender</th>
-                        <th>Blood Type</th>
-                        <th style="text-align: right;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% patients.forEach(p=> { %>
-                        <tr>
-                            <td style="color: var(--text-secondary); width: 80px;">#<%= p.patient_id %>
-                            </td>
-                            <td><strong style="font-size: 1.05rem;">
-                                    <%= p.full_name %>
-                                </strong></td>
-                            <td>
-                                <%= p.gender.charAt(0).toUpperCase() + p.gender.slice(1) %>
-                            </td>
-                            <td><span class="badge badge-success">
-                                    <%= p.blood_type %>
-                                </span></td>
-                            <td style="text-align: right;">
-                                <a href="/patients/<%= p.patient_id %>" class="btn"
-                                    style="padding: 0.5rem 1rem; font-size: 0.85rem;">
-                                    View Records &rarr;
-                                </a>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
-        </div>
+<!-- ═══ PAGE HEADER ═══ -->
+<div class="page-header animate-up">
+  <div class="page-header-info">
+    <div class="page-breadcrumb">
+      <span>◎</span> <span>Patients</span>
     </div>
+    <h1 class="page-title">Patient Explorer</h1>
+    <p class="page-subtitle">All records sourced from MySQL — Polyglot detail view on click</p>
+  </div>
+  <div class="page-actions">
+    <div class="search-box" style="width:260px;">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="patient-search" placeholder="Search by name or ID…" autocomplete="off">
+    </div>
+    <span class="db-pill mysql" style="font-size:0.7rem;padding:4px 10px;">
+      <span id="patient-count"><%= patients.length %> patients</span>
+    </span>
+  </div>
+</div>
 
-    <%- include('partials/footer') %>
+<!-- ═══ PATIENTS TABLE ═══ -->
+<div class="card animate-up delay-1" style="padding:0;overflow:hidden;">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:70px;">ID</th>
+        <th>Patient Name</th>
+        <th>Gender</th>
+        <th>Date of Birth</th>
+        <th>Blood Type</th>
+        <th>Contact</th>
+        <th style="text-align:right;">Clinical Record</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% patients.forEach((p, i) => {
+        const genderColor = p.gender === 'male' ? 'info' : 'purple';
+        const bloodColors = { 'A+':'success','A-':'danger','B+':'info','B-':'purple','O+':'warning','O-':'rose','AB+':'success','AB-':'amber' };
+        const bColor = bloodColors[p.blood_type] || 'neutral';
+      %>
+      <tr data-name="<%= p.full_name %>" data-id="<%= p.patient_id %>">
+        <td>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-3);">#<%= p.patient_id %></span>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="avatar" style="background:rgba(124,58,237,0.18);color:var(--primary-light);font-size:0.8rem;">
+              <%= p.full_name.charAt(0) %>
+            </div>
+            <div>
+              <div style="font-weight:600;font-size:0.88rem;"><%= p.full_name %></div>
+              <div style="font-size:0.72rem;color:var(--text-3);font-family:'JetBrains Mono',monospace;"><%= p.email %></div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="badge badge-<%= genderColor %>">
+            <%= p.gender.charAt(0).toUpperCase() + p.gender.slice(1) %>
+          </span>
+        </td>
+        <td>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--text-2);">
+            <%= p.date_of_birth ? new Date(p.date_of_birth).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : 'N/A' %>
+          </span>
+        </td>
+        <td>
+          <span class="badge badge-<%= bColor %>"><%= p.blood_type %></span>
+        </td>
+        <td style="font-size:0.8rem;color:var(--text-3);font-family:'JetBrains Mono',monospace;">
+          <%= p.phone || '—' %>
+        </td>
+        <td style="text-align:right;">
+          <a href="/patients/<%= p.patient_id %>" class="btn btn-outline btn-sm" style="display:inline-flex;">
+            View Records →
+          </a>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

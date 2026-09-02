@@ -1,87 +1,130 @@
 <%- include('partials/header') %>
 
-    <header>
-        <h2>System Audit Trail</h2>
-    </header>
-
-    <div class="grid" style="grid-template-columns: 1fr 1fr; align-items: start;">
-
-        <!-- SQL LOGS -->
-        <div class="card">
-            <h3 style="margin-bottom: 2rem;">Automated Transitions</h3>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Transition</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% sqlLogs.forEach(log=> { %>
-                            <tr>
-                                <td style="color: var(--accent);">#<%= log.appt_id %>
-                                </td>
-                                <td>
-                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">
-                                        <%= log.old_status %>
-                                    </span>
-                                    <span style="color: var(--accent); margin: 0 4px;">&rarr;</span>
-                                    <span class="badge badge-success">
-                                        <%= log.new_status %>
-                                    </span>
-                                </td>
-                                <td style="font-size:0.8rem; color:var(--text-secondary);">
-                                    <%= new Date(log.changed_at).toLocaleTimeString() %>
-                                </td>
-                            </tr>
-                            <% }) %>
-                                <% if(sqlLogs.length===0) { %>
-                                    <tr>
-                                        <td colspan="3"
-                                            style="text-align:center; padding: 2rem; color:var(--text-secondary);">No
-                                            trigger events logged yet.</td>
-                                    </tr>
-                                    <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- NOSQL LOGS -->
-        <div class="card">
-            <h3 style="margin-bottom: 2rem;">Clinical Activity</h3>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Action</th>
-                            <th>Target</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% nosqlLogs.forEach(log=> { %>
-                            <tr>
-                                <td><strong style="color:var(--accent);">
-                                        <%= log.action.replace(/_/g, ' ' ).toUpperCase() %>
-                                    </strong></td>
-                                <td style="color: var(--text-secondary);">
-                                    <%= log.target_type %>
-                                </td>
-                                <td><span class="badge" style="background: var(--primary-bg); color: var(--text-primary); border: 1px solid var(--border);">
-                                        <%= log.actor_role %>
-                                    </span></td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+<!-- ═══ PAGE HEADER ═══ -->
+<div class="page-header animate-up">
+  <div class="page-header-info">
+    <div class="page-breadcrumb">
+      <span>◉</span> <span>Audit</span>
     </div>
+    <h1 class="page-title">System Audit Trail</h1>
+    <p class="page-subtitle">
+      Dual-layer audit logging — SQL triggers from <span class="db-pill mysql" style="vertical-align:middle;">MySQL</span> &nbsp; Clinical events from <span class="db-pill mongo" style="vertical-align:middle;">MongoDB</span>
+    </p>
+  </div>
+</div>
 
-    <%- include('partials/footer') %>
+<!-- ═══ AUDIT GRID ═══ -->
+<div class="grid-2 animate-up delay-1" style="align-items:start;">
+
+  <!-- SQL AUDIT LOGS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="card-icon" style="background:rgba(0,116,217,0.15);">⚡</div>
+        Automated Transitions
+      </div>
+      <span class="db-pill mysql">SQL Trigger</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Appt ID</th>
+            <th>Status Transition</th>
+            <th>Logged At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (sqlLogs.length === 0) { %>
+          <tr>
+            <td colspan="3">
+              <div class="empty-state" style="padding:2rem;">
+                <div class="empty-state-icon">🔇</div>
+                <div class="empty-state-title">No trigger events yet</div>
+              </div>
+            </td>
+          </tr>
+          <% } %>
+          <% sqlLogs.forEach((log, i) => { %>
+          <tr>
+            <td>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--cyan);">#<%= log.appt_id %></span>
+            </td>
+            <td>
+              <div class="status-arrow">
+                <span class="status-from badge badge-neutral"><%= log.old_status %></span>
+                <span class="status-sep">→</span>
+                <span class="badge badge-success"><%= log.new_status %></span>
+              </div>
+            </td>
+            <td>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-3);">
+                <%= new Date(log.changed_at).toLocaleTimeString('en-GB',{hour12:false}) %>
+              </span>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NOSQL AUDIT LOGS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">🛡</div>
+        Clinical Activity Log
+        <span class="live-dot"></span>
+      </div>
+      <span class="db-pill mongo">MongoDB</span>
+    </div>
+    <div class="audit-feed">
+      <%
+        const dotColors = ['green','cyan','purple','amber','rose'];
+        nosqlLogs.forEach((log, i) => {
+      %>
+      <div class="audit-item">
+        <div class="audit-dot <%= dotColors[i % 5] %>"></div>
+        <div style="flex:1;">
+          <div class="audit-action">
+            <%= log.action.replace(/_/g,' ').toUpperCase() %>
+          </div>
+          <div class="audit-meta">
+            Target: <strong style="color:var(--text-2);"><%= log.target_type %></strong>
+            &bull; Role: <span class="badge badge-neutral" style="font-size:0.62rem;padding:1px 6px;"><%= log.actor_role %></span>
+            &bull; <span style="font-family:'JetBrains Mono',monospace;"><%= new Date(log.timestamp).toLocaleTimeString('en-GB',{hour12:false}) %></span>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ ARCHITECTURE NOTE ═══ -->
+<div class="card animate-up delay-2">
+  <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;">
+    <div>
+      <div class="section-label">MySQL Trigger Mechanism</div>
+      <p style="font-size:0.83rem;color:var(--text-2);line-height:1.7;">
+        Every time an <strong style="color:var(--text-1);">appointment status</strong> changes, a MySQL <code class="code-hint">AFTER UPDATE</code> trigger fires automatically, writing a timestamped row to <code class="code-hint">sql_audit_logs</code>. This enforces ACID-compliant accountability at the database layer.
+      </p>
+    </div>
+    <div>
+      <div class="section-label">MongoDB Schema-less Audit</div>
+      <p style="font-size:0.83rem;color:var(--text-2);line-height:1.7;">
+        Clinical events are written to <code class="code-hint">system_audit</code> collection as flexible JSON documents. This allows arbitrary metadata — role, target entity, actor ID — without schema migrations, ideal for rapidly evolving clinical workflows.
+      </p>
+    </div>
+    <div>
+      <div class="section-label">Polyglot Persistence Pattern</div>
+      <p style="font-size:0.83rem;color:var(--text-2);line-height:1.7;">
+        This dual-layer design is the <strong style="color:var(--text-1);">Polyglot Persistence</strong> architectural pattern — right tool for the right data. Structured transitions in MySQL; event-sourced clinical logs in MongoDB. Both surfaces rendered in real-time on this page.
+      </p>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
