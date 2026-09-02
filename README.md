@@ -258,7 +258,6 @@ HealthRegistry-Platform/
 
 <div align="center">
 
-**Built as a Computer Science graduate-level database systems project.**  
-Demonstrates Polyglot Persistence, relational design, NoSQL aggregation, and full-stack Node.js development.
+**Polyglot Persistence · RESTful API · Full-Stack Node.js**
 
 </div>
