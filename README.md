@@ -7,13 +7,19 @@
 <p><strong>A full-stack Polyglot Persistence platform combining MySQL 8 and MongoDB 7 — built to demonstrate enterprise-grade database architecture, real-time analytics, and RESTful API design.</strong></p>
 
 <p>
-  <img src="https://img.shields.io/badge/Node.js-v18+-339933?style=flat-square&logo=node.js&logoColor=white" />
+  <a href="http://212.227.176.145"><img src="https://img.shields.io/badge/🚀_Live_Demo-Online-success?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Node.js-v20+-339933?style=flat-square&logo=node.js&logoColor=white" />
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white" />
   <img src="https://img.shields.io/badge/MongoDB-7.0-47A248?style=flat-square&logo=mongodb&logoColor=white" />
-  <img src="https://img.shields.io/badge/Express.js-5.x-000000?style=flat-square&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker_Compose-Multi--Container-2496ED?style=flat-square&logo=docker&logoColor=white" />
   <img src="https://img.shields.io/badge/Records-1%2C900%2B-2d7a3a?style=flat-square" />
   <img src="https://img.shields.io/badge/REST_API-JSON-orange?style=flat-square" />
 </p>
+
+<p>🌐 <strong>Live Demo URL:</strong> <a href="http://212.227.176.145">http://212.227.176.145</a> (Port 80 &amp; 3000)</p>
 
 </div>
 
