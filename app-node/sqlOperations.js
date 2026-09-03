@@ -102,13 +102,13 @@ async function getAppointmentPrescriptions(appointmentId) {
 
 async function topPrescribedMedications(limit = 10) {
   const db = await conn();
-  const [rows] = await db.execute(
+  const safeLimit = parseInt(limit, 10) || 10;
+  const [rows] = await db.query(
     `SELECT medication_name, COUNT(*) AS times_prescribed
      FROM   prescriptions
      GROUP  BY medication_name
      ORDER  BY times_prescribed DESC
-     LIMIT  ?`,
-    [limit]
+     LIMIT  ${safeLimit}`
   );
   await db.end();
   return rows;
@@ -156,15 +156,15 @@ async function getPatientById(id) {
 
 async function getRecentAppointments(limit = 5) {
   const db = await conn();
-  const [rows] = await db.execute(
+  const safeLimit = parseInt(limit, 10) || 5;
+  const [rows] = await db.query(
     `SELECT a.appointment_id, a.scheduled_at, a.status,
             p.full_name AS patient_name, d.full_name AS doctor_name
      FROM   appointments a
      JOIN   patients p ON a.patient_id = p.patient_id
      JOIN   doctors  d ON a.doctor_id  = d.doctor_id
      ORDER  BY a.scheduled_at DESC
-     LIMIT  ?`,
-    [limit]
+     LIMIT  ${safeLimit}`
   );
   await db.end();
   return rows;
@@ -175,9 +175,9 @@ async function getRecentAppointments(limit = 5) {
 
 async function getSqlAuditLogs(limit = 10) {
   const db = await conn();
-  const [rows] = await db.execute(
-    "SELECT * FROM sql_audit_logs ORDER BY changed_at DESC LIMIT ?",
-    [limit]
+  const safeLimit = parseInt(limit, 10) || 10;
+  const [rows] = await db.query(
+    `SELECT * FROM sql_audit_logs ORDER BY changed_at DESC LIMIT ${safeLimit}`
   );
   await db.end();
   return rows;
@@ -192,15 +192,15 @@ async function getDoctorPerformance(docId) {
 
 async function getTopDoctors(limit = 5) {
   const db = await conn();
-  const [rows] = await db.execute(
+  const safeLimit = parseInt(limit, 10) || 5;
+  const [rows] = await db.query(
     `SELECT d.doctor_id, d.full_name, d.specialization, 
                 COUNT(a.appointment_id) AS total_appts
          FROM doctors d
          LEFT JOIN appointments a ON d.doctor_id = a.doctor_id
          GROUP BY d.doctor_id
          ORDER BY total_appts DESC
-         LIMIT ?`,
-    [limit]
+         LIMIT ${safeLimit}`
   );
   await db.end();
   return rows;
