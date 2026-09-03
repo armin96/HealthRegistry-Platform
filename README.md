@@ -7,7 +7,7 @@
 <p><strong>A full-stack Polyglot Persistence platform combining MySQL 8 and MongoDB 7 — built to demonstrate enterprise-grade database architecture, real-time analytics, and RESTful API design.</strong></p>
 
 <p>
-  <a href="http://212.227.176.145"><img src="https://img.shields.io/badge/🚀_Live_Demo-Online-success?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
+  <a href="https://healthregistry.sparkhubs.ir"><img src="https://img.shields.io/badge/🚀_Live_Demo-healthregistry.sparkhubs.ir-success?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
 </p>
 
 <p>
@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/REST_API-JSON-orange?style=flat-square" />
 </p>
 
-<p>🌐 <strong>Live Demo URL:</strong> <a href="http://212.227.176.145">http://212.227.176.145</a> (Port 80 &amp; 3000)</p>
+<p>🌐 <strong>Live Demo:</strong> <a href="https://healthregistry.sparkhubs.ir">https://healthregistry.sparkhubs.ir</a></p>
 
 </div>
 
